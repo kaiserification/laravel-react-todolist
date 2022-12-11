@@ -21,7 +21,7 @@ export default function Sidebar() {
                     <li className="nav-item">
                         <NavLink to='/tasks' className='nav-link'>
                             <File size={24} />
-                            Mes taches
+                            Mes tâches
                         </NavLink>
                     </li>
 

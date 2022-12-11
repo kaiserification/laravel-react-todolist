@@ -15,10 +15,10 @@ class TaskStatus extends Model
     const BLOCKED     = 'BLOCKED';
 
     const LIST = [
-        self::TODO,
-        self::IN_PROGRESS,
-        self::DONE,
-        self::BLOCKED,
+        self::TODO        => 'A faire',
+        self::IN_PROGRESS => 'En cours',
+        self::DONE        => 'Terminé',
+        self::BLOCKED     => 'Bloqué',
     ];
 
     protected $guarded = [];

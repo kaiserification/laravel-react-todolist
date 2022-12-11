@@ -6,6 +6,7 @@ import MainTitle from "./components/MainTitle";
 import Pagination from "./components/Pagination";
 
 export default function Users() {
+    const [search, setSearch] = useState('');
     const [users, setUsers]     = useState([]);
     const [loading, setLoading] = useState(false);
     const { setNotification }   = useAuthContext();
@@ -20,13 +21,16 @@ export default function Users() {
     });
 
     function getUsers() {
+        setLoading(true);
         axiosInstance.get('/users').then(({ data }) => {
             console.log(data)
             setUsers(data.data);
             setPagination(data.pagination);
         }).catch(error => {
             console.log(error);
-        });
+        }).finally(_ => {
+            setLoading(false);
+        })
     }
 
     function onDelete(e, id) {
@@ -44,6 +48,17 @@ export default function Users() {
     useEffect(() => {
         getUsers()
     }, []);
+
+    function searchData(search) {
+        axiosInstance.get('/users?search=' + search).then(({ data }) => {
+            setUsers(data.data);
+            setPagination(data.pagination);
+        });
+    }
+
+    useEffect(() => {
+        searchData(search);
+    }, [search]);
 
     useEffect(() => {
         function fetchData() {
@@ -68,6 +83,17 @@ export default function Users() {
             }}>
                 <MainTitle title="Comptes utilisateurs" />
                 <Link to='/users/new' className="btn btn-success btn-sm">Ajouter un compte</Link>
+            </div>
+
+            <div className="row">
+                <div className="col-md-3">
+                    <form>
+                        <div className="form-group">
+                            <label htmlFor="search" className="control-label">Recherche</label>
+                            <input type="search" value={search} onChange={e => setSearch(e.target.value)} name="search" id="search" className="form-control"/>
+                        </div>
+                    </form>
+                </div>
             </div>
 
             <div className="table-responsive">

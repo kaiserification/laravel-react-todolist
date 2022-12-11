@@ -1,5 +1,6 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Navigate, Outlet } from 'react-router-dom'
+import axiosInstance from '../../axios-client'
 import { useAuthContext } from '../../contexts/AuthProvider'
 
 import Navbar from '../components/Navbar'

@@ -3,7 +3,6 @@ import { Link, useNavigate } from "react-router-dom";
 import axiosInstance from "../axios-client";
 import { useAuthContext } from "../contexts/AuthProvider";
 import { getErrors } from "../helpers";
-import Alert from "./components/Alert";
 import MainTitle from "./components/MainTitle";
 
 export default function CreateTaskForm() {
@@ -16,7 +15,7 @@ export default function CreateTaskForm() {
     const [errors, setErrors] = useState([]);
     const [assignees, setAssignees] = useState([]);
     const [loading, setLoading] = useState(false);
-    const { setNotification } = useAuthContext();
+    const { setNotification, user } = useAuthContext();
 
     const onCreateTask = (e) => {
         e.preventDefault();
@@ -35,7 +34,7 @@ export default function CreateTaskForm() {
         axiosInstance
             .post("/tasks", payload)
             .then(({ data }) => {
-                setNotification("La tache a bien été créée.");
+                setNotification("La tâche a bien été créée.");
                 return navigate("/tasks");
             })
             .catch((error) => {
@@ -62,7 +61,7 @@ export default function CreateTaskForm() {
                     justifyContent: "space-between",
                 }}
             >
-                <MainTitle title="Nouvelle tache" />
+                <MainTitle title="Nouvelle tâche" />
                 <Link to="/tasks" className="btn btn-success btn-sm">
                     Retour
                 </Link>
@@ -123,15 +122,14 @@ export default function CreateTaskForm() {
                             </label>
                             <select
                                 ref={assignedToIdRef}
-                                className="form-control"
                                 className={'form-control ' + (errors.assigned_to_id ? 'is-invalid' : '')}
                                 name="assigned_to_id"
                                 id="assigned_to_id"
                             >
                                 <option value="">---</option>
-                                {assignees.map((user) => (
-                                    <option key={user.id} value={user.id}>
-                                        {user.name}
+                                {assignees.map((assignee) => (
+                                    <option key={assignee.id} value={assignee.id}>
+                                        {user?.id == assignee.id ? 'Moi' : assignee.name}
                                     </option>
                                 ))}
                             </select>

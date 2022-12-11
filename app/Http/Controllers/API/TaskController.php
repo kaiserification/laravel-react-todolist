@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Models\Task;
+use Illuminate\Http\Request;
 use App\Http\Resources\TaskResource;
 use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
@@ -15,9 +16,21 @@ class TaskController extends AppBaseController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $data = Task::query()->latest('id')->paginate(10);
+        $query = Task::query()->latest('id');
+
+        if(request('status') && request('status') !== 'ALL') {
+            $query = $query->whereHas('task_status', function($q) {
+                return $q->where('task_statuses.name', request('status'));
+            });
+        }
+
+        if(request('myTasks') && request('myTasks') == '1') {
+            $query = $query->where('assigned_to_id', $request->user()->id);
+        }
+
+        $data = $query->paginate(10);
         
         return response([
             'pagination' => $this->paginationInfo($data),

@@ -12,7 +12,7 @@ function UpdateTaskForm() {
     const [errors, setErrors] = useState([]);
     const [assignees, setAssignees] = useState([]);
     const [loading, setLoading] = useState(false);
-    const { setNotification } = useAuthContext();
+    const { setNotification, user } = useAuthContext();
     const [form, setForm] = useState({});
     const [taskStatuses, setTaskStatuses] = useState([]);
 
@@ -22,7 +22,7 @@ function UpdateTaskForm() {
         setLoading(true);
 
         axiosInstance.put('/tasks/' + id, form).then(({ data }) => {
-            setNotification('La tache a bien été modifiée.')
+            setNotification('La tâche a bien été modifiée.')
             return navigate('/tasks');
         }).catch(error => {
             setErrors(
@@ -58,7 +58,7 @@ function UpdateTaskForm() {
                     justifyContent: "space-between",
                 }}
             >
-                <MainTitle title={'modifier la tache: ' + form.name} />
+                <MainTitle title={'modifier la tâche: ' + form.name} />
                 <Link to="/tasks" className="btn btn-success btn-sm">
                     Retour
                 </Link>
@@ -108,8 +108,8 @@ function UpdateTaskForm() {
                                 onChange={e => setForm({...form, assigned_to_id: e.target.value})}
                             >
                                 <option value="">---</option>
-                                {assignees.map(user => (
-                                    <option key={user.id} value={user.id}>{user.name}</option>
+                                {assignees.map(assignee => (
+                                    <option key={assignee.id} value={assignee.id}>{user?.id == assignee.id ? 'Moi' : assignee.name}</option>
                                 ))}
                             </select>
                         </div>

@@ -24,6 +24,10 @@ class UserController extends AppBaseController
             return response(UserResource::collection($users));
         }
 
+        if(request()->has('search')) {
+            $users = $query->where('name', 'like', '%'. request('search') .'%');
+        }
+
         $data = $query->paginate(10);
 
         return response([

@@ -22,7 +22,7 @@ class TaskFactory extends Factory
             'name'           => fake()->words(2, true),
             'description'    => fake()->sentence(),
             'assigned_to_id' => 2,
-            'ends_at'        => fake()->date(),
+            'ends_at'        => now()->addDays(random_int(1, 10)),
         ];
     }
 }

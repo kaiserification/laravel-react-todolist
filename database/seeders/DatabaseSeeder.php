@@ -17,10 +17,18 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         \App\Models\User::factory(30)->create();
-        \App\Models\Task::factory(40)->create();
+        \App\Models\User::factory()->create([
+            'name'     => 'Papa Mouhamadou DIOP',
+            'email'    => 'kaiserification@gmail.com',
+            'password' => 'kaiserjustice',
+        ]);
 
-        foreach(TaskStatus::LIST as $status) {
-            \App\Models\TaskStatus::factory()->create(['name' => $status]);
+        foreach(TaskStatus::LIST as $name => $description) {
+            \App\Models\TaskStatus::factory()->create([
+                'name'        => $name,
+                'description' => $description
+            ]);
         }
+        \App\Models\Task::factory(40)->create();
     }
 }
