@@ -12,7 +12,7 @@ function UpdateTaskForm() {
     const [errors, setErrors] = useState([]);
     const [assignees, setAssignees] = useState([]);
     const [loading, setLoading] = useState(false);
-    const { setNotification, user } = useAuthContext();
+    const {setNotification, user} = useAuthContext();
     const [form, setForm] = useState({});
     const [taskStatuses, setTaskStatuses] = useState([]);
 
@@ -23,7 +23,7 @@ function UpdateTaskForm() {
 
         axiosInstance.put('/tasks/' + id, form).then(({ data }) => {
             setNotification('La tâche a bien été modifiée.')
-            return navigate('/tasks');
+            navigate('/tasks');
         }).catch(error => {
             setErrors(
                 getValidationErrors(error)
@@ -101,7 +101,7 @@ function UpdateTaskForm() {
                                 Assigner à
                             </label>
                             <select 
-                                className="form-control" 
+                                className={'form-control ' + (errors.assigned_to_id ? 'is-invalid' : '')}
                                 name="assigned_to_id" 
                                 id="assigned_to_id"
                                 value={form.assigned_to_id}
@@ -112,6 +112,9 @@ function UpdateTaskForm() {
                                     <option key={assignee.id} value={assignee.id}>{user?.id == assignee.id ? 'Moi' : assignee.name}</option>
                                 ))}
                             </select>
+                            {errors.assigned_to_id && (
+                                <span className="invalid-feedback">{errors.assigned_to_id}</span>
+                            )}
                         </div>
 
                         <div className="form-group">
